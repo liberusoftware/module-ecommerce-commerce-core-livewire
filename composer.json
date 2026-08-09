@@ -19,7 +19,7 @@
     },
     "require-dev": {
         "liberusoftware/ecommerce-commerce-core": "^0.3",
-        "liberusoftware/package-testbench": "^1.6",
+        "liberusoftware/package-testbench": "^1.7",
         "pestphp/pest": "^5.0"
     },
     "autoload": {
