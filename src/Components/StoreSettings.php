@@ -55,6 +55,8 @@ class StoreSettings extends Component
 
         app(SetStoreSetting::class)->handle($this->storeModel($this->storeId), $this->key, $this->value);
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.setting.saved', ['key' => $this->key]));
+
         $this->dispatch(
             'module-ecommerce-commerce-core.setting-changed',
             storeId: $this->storeId,
@@ -70,6 +72,8 @@ class StoreSettings extends Component
         $this->guardStore('manageSettings', $this->storeId);
 
         app(SetStoreSetting::class)->forget($this->storeModel($this->storeId), $key);
+
+        $this->announce(__('module-ecommerce-commerce-core::commerce.setting.forgotten', ['key' => $key]));
 
         $this->dispatch(
             'module-ecommerce-commerce-core.setting-changed',

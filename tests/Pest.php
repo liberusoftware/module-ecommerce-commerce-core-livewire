@@ -54,3 +54,26 @@ function channelOf(Store $store, string $state = 'active'): Channel
 {
     return Channel::factory()->{$state}()->create(['store_id' => $store->getKey()]);
 }
+
+/**
+ * Every field a component renders has a real label pointing at it.
+ *
+ * A placeholder is not a label: it disappears on the first keystroke and screen
+ * readers are not obliged to read it. This walks the rendered markup rather
+ * than trusting a per-view assertion, so a field added later without a label
+ * fails here.
+ */
+function expectEveryFieldToBeLabelled(string $html): void
+{
+    preg_match_all('/<input\b[^>]*>/i', $html, $inputs);
+
+    expect($inputs[0])->not->toBeEmpty();
+
+    foreach ($inputs[0] as $input) {
+        expect($input)->toMatch('/\sid="[^"]+"/');
+
+        preg_match('/\sid="([^"]+)"/', $input, $id);
+
+        expect($html)->toContain('for="'.$id[1].'"');
+    }
+}

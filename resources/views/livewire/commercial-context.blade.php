@@ -1,8 +1,8 @@
 <div>
-    <h3>{{ __('module-ecommerce-commerce-core::commerce.context.heading') }}</h3>
+    <h2>{{ __('module-ecommerce-commerce-core::commerce.context.heading') }}</h2>
 
-    <p role="status" wire:loading data-commerce-loading>
-        {{ __('module-ecommerce-commerce-core::commerce.loading') }}
+    <p role="status" aria-live="polite">
+        <span wire:loading data-commerce-loading>{{ __('module-ecommerce-commerce-core::commerce.loading') }}</span>
     </p>
 
     @if ($this->context->isResolved())

@@ -4,11 +4,19 @@ return [
 
     'loading' => 'Working…',
 
+    // Names for controls whose visible content is a glyph. A button labelled
+    // only by an arrow is a button with no name at all to a screen reader.
+    'pagination' => [
+        'previous' => 'Previous page',
+        'next' => 'Next page',
+    ],
+
     'store' => [
         'heading' => 'Stores',
         'name' => 'Store name',
         'create' => 'Create store',
         'saved' => 'Store saved.',
+        'created' => 'Store :name created.',
         'empty' => 'No stores yet.',
         'slug' => 'Slug',
         'currency' => 'Currency',
@@ -22,12 +30,16 @@ return [
         'name' => 'Channel name',
         'theme' => 'Theme',
         'create' => 'Create channel',
+        'created' => 'Channel :name created.',
         'empty' => 'This store has no channels yet.',
         'primary_host' => 'Primary hostname',
         'no_primary_host' => 'No hostname yet',
         'select' => 'Select',
         'selected' => 'Selected channel',
         'none_selected' => 'Select a channel to manage its status and hostnames.',
+        'now_managing' => 'Now managing the channel :name.',
+        'deselected' => 'No channel selected.',
+        'clear_selection' => 'Stop managing this channel',
     ],
 
     'domain' => [
@@ -38,6 +50,9 @@ return [
         'make_primary' => 'Make primary',
         'remove' => 'Remove',
         'empty' => 'This channel answers on no hostname yet.',
+        'added' => 'Hostname :host added.',
+        'promoted' => ':host is now the primary hostname.',
+        'removed' => 'Hostname :host removed.',
         'claimed' => 'The hostname :host is already claimed by another channel.',
     ],
 
@@ -47,6 +62,8 @@ return [
         'value' => 'Value',
         'save' => 'Save setting',
         'forget' => 'Forget',
+        'saved' => 'Setting :key saved.',
+        'forgotten' => 'Setting :key forgotten.',
         'empty' => 'This store has no settings yet.',
     ],
 
@@ -56,6 +73,8 @@ return [
         'disable' => 'Disable',
         'on' => 'Enabled',
         'off' => 'Disabled',
+        'turned_on' => ':capability is now enabled.',
+        'turned_off' => ':capability is now disabled.',
         'unknown' => 'That capability is not one this release knows about.',
     ],
 
@@ -80,6 +99,7 @@ return [
     'status' => [
         'heading' => 'Status',
         'current' => 'Currently :status.',
+        'changed' => 'Moved to :status.',
         'move_to' => 'Move to :status',
         'terminal' => 'This status is final; there is nowhere left to move.',
         'unknown' => 'That status is not one this release knows about.',

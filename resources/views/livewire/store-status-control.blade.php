@@ -1,6 +1,8 @@
 <div>
-    <h3>{{ __('module-ecommerce-commerce-core::commerce.status.heading') }}</h3>
+    <h2>{{ __('module-ecommerce-commerce-core::commerce.status.heading') }}</h2>
 
+    {{-- The status is a sentence, not a colour. The data attribute is for
+         themes and tests; the words are for everyone. --}}
     <p data-commerce-status="{{ $this->store->status->value }}">
         {{ __('module-ecommerce-commerce-core::commerce.status.current', ['status' => $this->store->status->label()]) }}
     </p>
@@ -9,8 +11,9 @@
         <p role="alert" data-commerce-error="status">{{ $message }}</p>
     @enderror
 
-    <p role="status" wire:loading wire:target="changeTo" data-commerce-loading>
-        {{ __('module-ecommerce-commerce-core::commerce.loading') }}
+    <p role="status" aria-live="polite">
+        <span wire:loading wire:target="changeTo" data-commerce-loading>{{ __('module-ecommerce-commerce-core::commerce.loading') }}</span>
+        <span data-commerce-announcement>{{ $announcement }}</span>
     </p>
 
     @forelse ($this->transitions as $transition)

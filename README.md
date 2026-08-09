@@ -111,16 +111,42 @@ forking the rest. Wording is separate:
 php artisan vendor:publish --tag=module-ecommerce-commerce-core-translations
 ```
 
+## Accessibility
+
+The markup is unstyled but not unfinished. Every field has a real `<label for>`,
+invalid fields carry `aria-invalid` and point at their message, each component
+has one `role="status" aria-live="polite"` region carrying both the loading text
+and a sentence saying what the last action did, status is written in words as
+well as marked in a data attribute, every repeated row is `wire:key`ed so focus
+survives a re-render, and every control is a real button or input reachable from
+the keyboard.
+
+A theme publishing these views owns the classes and the layout — but the label
+associations, the `aria-*` wiring, the live region and the keys are behaviour,
+not decoration. `tests/Feature/AccessibilityTest.php` asserts the parts that are
+visible in rendered output.
+
 ## Development note
 
 `liberusoftware/ecommerce-commerce-core` appears in both `require` and
 `require-dev`. It is a runtime dependency, and the shared test bootstrap boots a
 sibling module's service provider only when it is dev-required — a runtime
 requirement deliberately never boots anything, because installing a module must
-not enable it.
+not enable it. `composer validate` warns about the duplicate; removing either
+entry breaks something. The long version is in
+[docs/adoption.md](docs/adoption.md#why-the-domain-package-is-in-both-require-and-require-dev).
 
 ## Documentation
 
+- [Presentation documentation](docs/presentation.md) — component inventory and
+  aliases, per-component state and what is URL-bound, events, the ability each
+  action asks for, the domain action each write delegates to, theme overrides
+  and translations.
+- [Runbook](docs/runbook.md) — what this package looks like when it goes wrong
+  in production, and what the operator does about it.
+- [Adoption and upgrade guidance](docs/adoption.md) — installing, enabling,
+  routing, dependency pinning and the 0.1.0 → 0.2.0 upgrade note.
+- [Changelog](CHANGELOG.md) — release notes.
 - [Liberu Main Documentation](https://github.com/liberusoftware/documentation)
 - [Architecture & Standards Index](https://github.com/liberusoftware/documentation/tree/main/architecture)
 

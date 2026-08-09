@@ -65,6 +65,10 @@ class ChannelStatusControl extends Component
             return;
         }
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.status.changed', [
+            'status' => $target->label(),
+        ]));
+
         $this->dispatch(
             'module-ecommerce-commerce-core.channel-status-changed',
             channelId: $this->channelId,

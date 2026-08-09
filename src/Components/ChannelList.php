@@ -60,6 +60,8 @@ class ChannelList extends Component
             $this->theme,
         );
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.channel.created', ['name' => $this->name]));
+
         $this->name = '';
         $this->resetPage();
 

@@ -68,6 +68,10 @@ class ChannelDomains extends Component
             return;
         }
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.domain.added', [
+            'host' => ChannelDomain::normalise($this->host),
+        ]));
+
         $this->dispatch(
             'module-ecommerce-commerce-core.domain-added',
             channelId: $this->channelId,
@@ -85,6 +89,10 @@ class ChannelDomains extends Component
         $domain = $this->ownDomain($domainId);
 
         app(PromoteDomainToPrimary::class)->handle(ChannelDomain::query()->findOrFail($domain->id));
+
+        $this->announce(__('module-ecommerce-commerce-core::commerce.domain.promoted', [
+            'host' => $domain->host,
+        ]));
 
         $this->dispatch(
             'module-ecommerce-commerce-core.primary-domain-changed',
@@ -105,6 +113,10 @@ class ChannelDomains extends Component
         $domain = $this->ownDomain($domainId);
 
         app(RemoveChannelDomain::class)->handle(ChannelDomain::query()->findOrFail($domain->id));
+
+        $this->announce(__('module-ecommerce-commerce-core::commerce.domain.removed', [
+            'host' => $domain->host,
+        ]));
 
         $this->dispatch(
             'module-ecommerce-commerce-core.domain-removed',

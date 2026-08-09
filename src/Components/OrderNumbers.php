@@ -24,6 +24,14 @@ class OrderNumbers extends Component
 
     public string $prefix = '';
 
+    /**
+     * The number this component last allocated.
+     *
+     * Locked: it is written by the sequence and read by the operator, so a
+     * value arriving from the browser could only ever be a lie about which
+     * number was consumed.
+     */
+    #[Locked]
     public ?string $allocated = null;
 
     public function mount(int $storeId): void

@@ -58,6 +58,13 @@ class StoreCapabilities extends Component
 
         app(SetStoreCapability::class)->handle($this->storeModel($this->storeId), $subject, $enabled);
 
+        $this->announce(__(
+            $enabled
+                ? 'module-ecommerce-commerce-core::commerce.capability.turned_on'
+                : 'module-ecommerce-commerce-core::commerce.capability.turned_off',
+            ['capability' => $subject->label()],
+        ));
+
         $this->dispatch(
             'module-ecommerce-commerce-core.capability-changed',
             storeId: $this->storeId,

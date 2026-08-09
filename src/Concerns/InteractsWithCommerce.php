@@ -10,6 +10,7 @@ use Liberu\Ecommerce\CommerceCore\Models\Store;
 use Liberu\Ecommerce\CommerceCore\Queries\ChannelQuery;
 use Liberu\Ecommerce\CommerceCore\Queries\StoreQuery;
 use Liberu\Ecommerce\CommerceCore\Services\CommerceAccess;
+use Livewire\Attributes\Locked;
 
 /**
  * The four things every component in this package does before it does anything
@@ -22,6 +23,37 @@ use Liberu\Ecommerce\CommerceCore\Services\CommerceAccess;
  */
 trait InteractsWithCommerce
 {
+    /**
+     * What just happened, in words, for the component's live region.
+     *
+     * A `wire:loading` that only dims a button and a row that silently appears
+     * are both invisible to a screen reader. Every write says what it did here,
+     * and the view renders it inside `role="status"`.
+     *
+     * Locked because it is announced verbatim: a string the browser could set
+     * is a string an attacker could put in the operator's ear.
+     */
+    #[Locked]
+    public string $announcement = '';
+
+    /**
+     * Announcements last exactly one render.
+     *
+     * A live region announces changes, so carrying yesterday's sentence into
+     * the next request would either say nothing (unchanged) or say it again at
+     * the wrong moment. Cleared on hydration, which is every request after the
+     * one that set it.
+     */
+    public function hydrateInteractsWithCommerce(): void
+    {
+        $this->announcement = '';
+    }
+
+    protected function announce(string $message): void
+    {
+        $this->announcement = $message;
+    }
+
     /**
      * The authenticated actor.
      *

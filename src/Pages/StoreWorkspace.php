@@ -46,17 +46,26 @@ class StoreWorkspace extends Component
     {
         if ($channelId === null) {
             $this->channelId = null;
+            $this->announce(__('module-ecommerce-commerce-core::commerce.channel.deselected'));
 
             return;
         }
 
         $this->guardChannel('view', $channelId);
 
-        if ($this->channelData($channelId)->storeId !== $this->storeId) {
+        $channel = $this->channelData($channelId);
+
+        if ($channel->storeId !== $this->storeId) {
             abort(404);
         }
 
         $this->channelId = $channelId;
+
+        // A whole section of the page appears; a live region is the only thing
+        // that tells anyone who is not looking at it.
+        $this->announce(__('module-ecommerce-commerce-core::commerce.channel.now_managing', [
+            'name' => $channel->name,
+        ]));
     }
 
     public function render(): View

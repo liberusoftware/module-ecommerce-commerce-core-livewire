@@ -59,6 +59,8 @@ class StoreList extends Component
 
         $store = app(CreateStore::class)->handle($this->name, $this->teamId());
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.store.created', ['name' => $this->name]));
+
         $this->name = '';
         $this->resetPage();
 

@@ -70,6 +70,10 @@ class StoreStatusControl extends Component
             return;
         }
 
+        $this->announce(__('module-ecommerce-commerce-core::commerce.status.changed', [
+            'status' => $target->label(),
+        ]));
+
         $this->dispatch(
             'module-ecommerce-commerce-core.store-status-changed',
             storeId: $this->storeId,

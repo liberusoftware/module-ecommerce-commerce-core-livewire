@@ -3,7 +3,7 @@
     "name": "ecommerce-commerce-core-livewire",
     "display_name": "Commerce Core Livewire",
     "description": "Livewire 4 components presenting stores, channels, commercial context, order numbering, shared states, settings, capabilities and domain events.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "category": "presentation",
     "provider": "Liberu\\Ecommerce\\CommerceCore\\Livewire\\CommerceCoreLivewireServiceProvider",
     "requires": {
