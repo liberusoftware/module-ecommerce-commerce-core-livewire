@@ -87,7 +87,10 @@ it('lets the primary hostname be removed and promotes the survivor', function ()
         ->call('remove', $primary->getKey())
         ->assertHasNoErrors()
         ->assertDispatched('module-ecommerce-commerce-core.domain-removed')
-        ->assertDontSee('one.example.com');
+        // The row is gone; the hostname is still on the page, because the live
+        // region is saying which one was removed.
+        ->assertDontSeeHtml('data-commerce-domain="one.example.com"')
+        ->assertSee(__('module-ecommerce-commerce-core::commerce.domain.removed', ['host' => 'one.example.com']));
 
     expect(ChannelDomain::query()->whereKey($primary->getKey())->exists())->toBeFalse()
         ->and(ChannelDomain::query()->whereKey($survivor->getKey())->value('is_primary'))->toBeTrue();
