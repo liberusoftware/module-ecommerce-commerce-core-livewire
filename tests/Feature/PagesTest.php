@@ -2,7 +2,7 @@
 
 use Liberu\Ecommerce\CommerceCore\Livewire\Pages\Stores;
 use Liberu\Ecommerce\CommerceCore\Livewire\Pages\StoreWorkspace;
-use Livewire\Exceptions\CannotUpdateLockedPropertyException;
+use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

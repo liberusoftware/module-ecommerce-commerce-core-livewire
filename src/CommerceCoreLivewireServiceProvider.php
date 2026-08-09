@@ -57,9 +57,30 @@ class CommerceCoreLivewireServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', self::NAMESPACE);
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', self::NAMESPACE);
 
-        foreach (self::COMPONENTS as $alias => $component) {
-            Livewire::component(self::NAMESPACE.'::'.$alias, $component);
+        $aliases = $this->aliases();
+
+        // Two halves of the same registration, and both are needed.
+        //
+        // `component()` is the name a class reports as — it is what a rendered
+        // component calls itself and what `Livewire::test(SomeClass::class)`
+        // resolves back to, so without it the public name of a component would
+        // be derived from wherever its file happens to sit.
+        //
+        // `resolveMissingComponent()` is the other direction. Livewire 4's
+        // finder answers a `namespace::name` only from `addNamespace()`, which
+        // maps one namespace onto one class namespace — and this package
+        // deliberately has two, `Components\` and `Pages\`, because a reusable
+        // component and a routable page are different things. So the alias
+        // table answers instead, which is what "explicit aliases" means here:
+        // the map is the public interface rather than a consequence of the
+        // directory layout.
+        foreach ($aliases as $alias => $component) {
+            Livewire::component($alias, $component);
         }
+
+        Livewire::resolveMissingComponent(
+            static fn (string $name): ?string => $aliases[$name] ?? null,
+        );
 
         // Publishing views is how a theme overrides one without forking the
         // package. Translations publish separately because a deployment that
@@ -71,5 +92,21 @@ class CommerceCoreLivewireServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/lang' => lang_path('vendor/'.self::NAMESPACE),
         ], self::NAMESPACE.'-translations');
+    }
+
+    /**
+     * The component table, keyed by the fully qualified alias.
+     *
+     * @return array<string, class-string>
+     */
+    public function aliases(): array
+    {
+        $aliases = [];
+
+        foreach (self::COMPONENTS as $alias => $component) {
+            $aliases[self::NAMESPACE.'::'.$alias] = $component;
+        }
+
+        return $aliases;
     }
 }

@@ -3,7 +3,7 @@
 use Liberu\Ecommerce\CommerceCore\Enums\StoreStatus;
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\StoreStatusControl;
 use Liberu\Ecommerce\CommerceCore\Models\Store;
-use Livewire\Exceptions\CannotUpdateLockedPropertyException;
+use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
