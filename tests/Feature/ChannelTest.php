@@ -5,7 +5,6 @@ use Liberu\Ecommerce\CommerceCore\Livewire\Components\ChannelList;
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\ChannelStatusControl;
 use Liberu\Ecommerce\CommerceCore\Models\Channel;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('lists a store\'s channels and says when there are none', function () {
     actor();
@@ -60,14 +59,15 @@ it('refuses to create a channel on an archived store', function () {
 
     Livewire::test(ChannelList::class, ['storeId' => $store->getKey()])
         ->set('name', 'Marketplace')
-        ->call('create');
-})->throws(HttpException::class);
+        ->call('create')
+        ->assertForbidden();
+});
 
 it('denies listing another team\'s channels', function () {
     actor();
 
-    Livewire::test(ChannelList::class, ['storeId' => storeOwnedBy(9)->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(ChannelList::class, ['storeId' => storeOwnedBy(9)->getKey()])->assertForbidden();
+});
 
 it('moves a channel through an allowed transition', function () {
     actor();
@@ -111,5 +111,5 @@ it('denies a channel belonging to another team', function () {
 
     $channel = channelOf(storeOwnedBy(9));
 
-    Livewire::test(ChannelStatusControl::class, ['channelId' => $channel->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(ChannelStatusControl::class, ['channelId' => $channel->getKey()])->assertForbidden();
+});

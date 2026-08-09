@@ -2,7 +2,6 @@
 
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\OrderNumbers;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('allocates the next number in the store\'s sequence', function () {
     actor();
@@ -37,11 +36,12 @@ it('will not allocate against an archived store', function () {
     actor();
 
     Livewire::test(OrderNumbers::class, ['storeId' => storeOwnedBy(state: 'archived')->getKey()])
-        ->call('allocate');
-})->throws(HttpException::class);
+        ->call('allocate')
+        ->assertForbidden();
+});
 
 it('denies allocating against another team\'s store', function () {
     actor();
 
-    Livewire::test(OrderNumbers::class, ['storeId' => storeOwnedBy(9)->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(OrderNumbers::class, ['storeId' => storeOwnedBy(9)->getKey()])->assertForbidden();
+});

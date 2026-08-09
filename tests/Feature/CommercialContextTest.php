@@ -4,7 +4,6 @@ use Liberu\Ecommerce\CommerceCore\Contracts\ResolvesCommercialContext;
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\CommercialContextPanel;
 use Liberu\Ecommerce\CommerceCore\Values\CommercialContext;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('reports an unresolved context as a state rather than a failure', function () {
     actor();
@@ -49,5 +48,5 @@ it('presents whatever the host resolves, through the contract', function () {
 it('denies an actor with no team', function () {
     teamlessActor();
 
-    Livewire::test(CommercialContextPanel::class);
-})->throws(HttpException::class);
+    Livewire::test(CommercialContextPanel::class)->assertForbidden();
+});

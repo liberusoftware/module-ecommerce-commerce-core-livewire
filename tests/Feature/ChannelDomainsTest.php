@@ -3,7 +3,6 @@
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\ChannelDomains;
 use Liberu\Ecommerce\CommerceCore\Models\ChannelDomain;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('says when a channel answers on nothing yet', function () {
     actor();
@@ -103,13 +102,14 @@ it('will not act on a hostname belonging to somebody else\'s channel', function 
     $stranger = ChannelDomain::factory()->create(['channel_id' => $theirs->getKey(), 'host' => 'stranger.example.com']);
 
     Livewire::test(ChannelDomains::class, ['channelId' => $mine->getKey()])
-        ->call('remove', $stranger->getKey());
-})->throws(HttpException::class);
+        ->call('remove', $stranger->getKey())
+        ->assertNotFound();
+});
 
 it('denies managing the hostnames of another team\'s channel', function () {
     actor();
 
     $theirs = channelOf(storeOwnedBy(9));
 
-    Livewire::test(ChannelDomains::class, ['channelId' => $theirs->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(ChannelDomains::class, ['channelId' => $theirs->getKey()])->assertForbidden();
+});

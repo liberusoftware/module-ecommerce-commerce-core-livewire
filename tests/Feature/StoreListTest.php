@@ -3,7 +3,6 @@
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\StoreList;
 use Liberu\Ecommerce\CommerceCore\Models\Store;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('lists only the stores the actor\'s team owns', function () {
     actor();
@@ -58,12 +57,12 @@ it('refuses a name the domain would not accept', function () {
 it('denies an actor with no team at all', function () {
     teamlessActor();
 
-    Livewire::test(StoreList::class);
-})->throws(HttpException::class);
+    Livewire::test(StoreList::class)->assertForbidden();
+});
 
 it('denies an actor who is not signed in', function () {
-    Livewire::test(StoreList::class);
-})->throws(HttpException::class);
+    Livewire::test(StoreList::class)->assertForbidden();
+});
 
 it('bounds a page size arriving from the URL', function () {
     actor();

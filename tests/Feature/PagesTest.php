@@ -4,7 +4,6 @@ use Liberu\Ecommerce\CommerceCore\Livewire\Pages\Stores;
 use Liberu\Ecommerce\CommerceCore\Livewire\Pages\StoreWorkspace;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('composes the stores index from the package\'s own components', function () {
     actor();
@@ -19,8 +18,8 @@ it('composes the stores index from the package\'s own components', function () {
 it('denies the stores index to an actor with no team', function () {
     teamlessActor();
 
-    Livewire::test(Stores::class);
-})->throws(HttpException::class);
+    Livewire::test(Stores::class)->assertForbidden();
+});
 
 it('composes one store\'s workspace', function () {
     actor();
@@ -57,8 +56,9 @@ it('refuses a channel belonging to another store', function () {
     $elsewhere = channelOf(storeOwnedBy());
 
     Livewire::test(StoreWorkspace::class, ['storeId' => $store->getKey()])
-        ->call('selectChannel', $elsewhere->getKey());
-})->throws(HttpException::class);
+        ->call('selectChannel', $elsewhere->getKey())
+        ->assertNotFound();
+});
 
 it('refuses a channel belonging to another team', function () {
     actor();
@@ -67,14 +67,15 @@ it('refuses a channel belonging to another team', function () {
     $theirs = channelOf(storeOwnedBy(9));
 
     Livewire::test(StoreWorkspace::class, ['storeId' => $store->getKey()])
-        ->call('selectChannel', $theirs->getKey());
-})->throws(HttpException::class);
+        ->call('selectChannel', $theirs->getKey())
+        ->assertForbidden();
+});
 
 it('denies a workspace on another team\'s store', function () {
     actor();
 
-    Livewire::test(StoreWorkspace::class, ['storeId' => storeOwnedBy(9)->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(StoreWorkspace::class, ['storeId' => storeOwnedBy(9)->getKey()])->assertForbidden();
+});
 
 it('will not let the browser point a workspace at another store', function () {
     actor();

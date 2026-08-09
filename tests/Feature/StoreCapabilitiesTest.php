@@ -4,7 +4,6 @@ use Liberu\Ecommerce\CommerceCore\Enums\Capability;
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\StoreCapabilities;
 use Liberu\Ecommerce\CommerceCore\Models\StoreCapability;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('shows every capability the release knows about, off by default', function () {
     actor();
@@ -52,5 +51,5 @@ it('rejects a capability this release has never heard of', function () {
 it('denies capabilities on another team\'s store', function () {
     actor();
 
-    Livewire::test(StoreCapabilities::class, ['storeId' => storeOwnedBy(9)->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(StoreCapabilities::class, ['storeId' => storeOwnedBy(9)->getKey()])->assertForbidden();
+});

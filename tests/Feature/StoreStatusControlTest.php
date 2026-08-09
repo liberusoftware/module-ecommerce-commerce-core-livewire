@@ -5,7 +5,6 @@ use Liberu\Ecommerce\CommerceCore\Livewire\Components\StoreStatusControl;
 use Liberu\Ecommerce\CommerceCore\Models\Store;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('offers exactly the moves the enum allows', function () {
     actor();
@@ -77,8 +76,8 @@ it('denies mounting against another team\'s store', function () {
 
     $theirs = storeOwnedBy(9);
 
-    Livewire::test(StoreStatusControl::class, ['storeId' => $theirs->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(StoreStatusControl::class, ['storeId' => $theirs->getKey()])->assertForbidden();
+});
 
 it('refuses to let the browser retarget the component', function () {
     actor();

@@ -3,7 +3,6 @@
 use Liberu\Ecommerce\CommerceCore\Livewire\Components\StoreSettings;
 use Liberu\Ecommerce\CommerceCore\Models\StoreSetting;
 use Livewire\Livewire;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 it('says when a store has no settings yet', function () {
     actor();
@@ -62,11 +61,11 @@ it('denies settings on an archived store', function () {
     actor();
 
     // `manageSettings` follows `update`, and an archived store cannot be updated.
-    Livewire::test(StoreSettings::class, ['storeId' => storeOwnedBy(state: 'archived')->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(StoreSettings::class, ['storeId' => storeOwnedBy(state: 'archived')->getKey()])->assertForbidden();
+});
 
 it('denies settings on another team\'s store', function () {
     actor();
 
-    Livewire::test(StoreSettings::class, ['storeId' => storeOwnedBy(9)->getKey()]);
-})->throws(HttpException::class);
+    Livewire::test(StoreSettings::class, ['storeId' => storeOwnedBy(9)->getKey()])->assertForbidden();
+});
