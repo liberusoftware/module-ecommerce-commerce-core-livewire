@@ -25,11 +25,99 @@
 
 ## Quick start
 
-To install this package via Composer, run:
+The domain module this package presents is not published on Packagist, so a
+composition adds its repository before requiring either:
+
+```jsonc
+"repositories": [
+    { "type": "vcs", "url": "https://github.com/liberusoftware/module-ecommerce-commerce-core" }
+]
+```
 
 ```bash
-composer require liberusoftware/module-ecommerce-commerce-core-livewire
+composer require liberusoftware/ecommerce-commerce-core-livewire
 ```
+
+Installing is not enabling. Both this package and the domain module it presents
+are enabled by the module registry, which reads:
+
+```dotenv
+MODULES_ENABLED=ecommerce-commerce-core,ecommerce-commerce-core-livewire
+```
+
+Enabling only `ecommerce-commerce-core-livewire` installs components with no
+domain behind them; enabling only `ecommerce-commerce-core` is a perfectly good
+headless composition.
+
+## Components
+
+Every component is registered under one bounded namespace,
+`module-ecommerce-commerce-core::`. The aliases are the package's public
+interface — they are stable, and changing one is a breaking release.
+
+| Alias | Props | What it is for |
+| --- | --- | --- |
+| `module-ecommerce-commerce-core::store-list` | — | The stores the actor's team owns, and the form that creates another. Page size is URL-bound. |
+| `module-ecommerce-commerce-core::store-status-control` | `store-id` | Moves a store through its lifecycle, offering only the moves `StoreStatus::allowedTransitions()` allows. |
+| `module-ecommerce-commerce-core::store-settings` | `store-id` | A store's key/value settings, with forget. |
+| `module-ecommerce-commerce-core::store-capabilities` | `store-id` | Turns each `Capability` on or off. |
+| `module-ecommerce-commerce-core::order-numbers` | `store-id` | Allocates the next number from a store's sequence. |
+| `module-ecommerce-commerce-core::channel-list` | `store-id` | A store's channels, and the form that adds one. |
+| `module-ecommerce-commerce-core::channel-status-control` | `channel-id` | The channel lifecycle, driven the same way. |
+| `module-ecommerce-commerce-core::channel-domains` | `channel-id` | Add, promote and remove the hostnames a channel answers on. |
+| `module-ecommerce-commerce-core::commercial-context` | — | What the current request resolves to commercially, read through `ResolvesCommercialContext`. |
+| `module-ecommerce-commerce-core::stores` | — | Full page: the stores index. |
+| `module-ecommerce-commerce-core::store-workspace` | `store-id` | Full page: one store and every surface that acts on it. |
+
+Used from a Blade view or an application route:
+
+```blade
+<livewire:module-ecommerce-commerce-core::store-list />
+<livewire:module-ecommerce-commerce-core::store-workspace :store-id="$storeId" />
+```
+
+```php
+Route::get('/commerce/stores', Stores::class)->middleware(['auth'])->name('commerce.stores');
+```
+
+Routes, layouts, navigation and middleware belong to the application composing
+this package; the full-page components declare no layout of their own and
+authorize for themselves regardless of the route that reaches them.
+
+### Events
+
+Components dispatch presentation events mirroring the domain events they caused.
+Payloads carry identifiers only.
+
+`store-created`, `store-status-changed`, `channel-created`,
+`channel-status-changed`, `channel-selected`, `domain-added`, `domain-removed`,
+`primary-domain-changed`, `setting-changed`, `capability-changed` and
+`order-number-allocated`, each prefixed `module-ecommerce-commerce-core.`.
+
+## Overriding a view
+
+The package ships functional, unstyled markup; a theme owns the final
+presentation. Publish the views and edit the copy:
+
+```bash
+php artisan vendor:publish --tag=module-ecommerce-commerce-core-views
+```
+
+They land in `resources/views/vendor/module-ecommerce-commerce-core/`, and a
+file placed there wins over the package's own — override one view without
+forking the rest. Wording is separate:
+
+```bash
+php artisan vendor:publish --tag=module-ecommerce-commerce-core-translations
+```
+
+## Development note
+
+`liberusoftware/ecommerce-commerce-core` appears in both `require` and
+`require-dev`. It is a runtime dependency, and the shared test bootstrap boots a
+sibling module's service provider only when it is dev-required — a runtime
+requirement deliberately never boots anything, because installing a module must
+not enable it.
 
 ## Documentation
 

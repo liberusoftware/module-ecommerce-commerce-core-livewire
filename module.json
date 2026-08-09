@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.liberu.dev/module/v1.json",
+    "name": "ecommerce-commerce-core-livewire",
+    "display_name": "Commerce Core Livewire",
+    "description": "Livewire 4 components presenting stores, channels, commercial context, order numbering, shared states, settings, capabilities and domain events.",
+    "version": "0.1.0",
+    "category": "presentation",
+    "provider": "Liberu\\Ecommerce\\CommerceCore\\Livewire\\CommerceCoreLivewireServiceProvider",
+    "requires": {
+        "php": "^8.5",
+        "laravel": "^13.0",
+        "packages": {
+            "liberusoftware/module-manager": "^1.4",
+            "liberusoftware/ecommerce-commerce-core": "^0.3"
+        }
+    },
+    "capabilities": [
+        "ecommerce.commerce-core.livewire"
+    ],
+    "default_enabled": false,
+    "features": [
+        "Store list and creation",
+        "Store lifecycle transitions",
+        "Channel list and creation",
+        "Channel lifecycle transitions",
+        "Channel domain management",
+        "Commercial context panel",
+        "Order number allocation",
+        "Store settings editor",
+        "Store capability toggles",
+        "Presentation events for domain changes",
+        "Full-page stores index",
+        "Full-page store workspace"
+    ]
+}
